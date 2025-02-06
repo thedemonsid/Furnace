@@ -53,7 +53,7 @@ const data = {
   navMain: [
     {
       title: "Projects",
-      url: "#",
+      url: "/projects",
       icon: SquareTerminal,
       isActive: true,
       items: [
@@ -73,7 +73,7 @@ const data = {
     },
     {
       title: "Blogs",
-      url: "#",
+      url: "/blogs",
       icon: Bot,
       items: [
         {
@@ -92,7 +92,7 @@ const data = {
     },
     {
       title: "Documentation",
-      url: "#",
+      url: "/docs",
       icon: BookOpen,
       items: [
         {
@@ -115,7 +115,7 @@ const data = {
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
       items: [
         {
