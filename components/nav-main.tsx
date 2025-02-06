@@ -49,7 +49,7 @@ export function NavMain({
                 <SidebarMenuButton tooltip={item.title}>
                   <Link href={`/dashboard/${item.url}`}>
                     <div className="flex items-center gap-2">
-                      <span>{item.icon && <item.icon size={"20"} />} </span>
+                      <span>{item.icon && <item.icon />} </span>
                       <span> {item.title}</span>
                     </div>
                   </Link>
@@ -61,9 +61,9 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <Link href={subItem.url}>
                           <span>{subItem.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}
