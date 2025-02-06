@@ -19,7 +19,9 @@ const Navigator = () => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
-          <BreadcrumbLink href="/dashboard">Building Your Project</BreadcrumbLink>
+          <BreadcrumbLink href="/dashboard">
+            Building Your Project
+          </BreadcrumbLink>
         </BreadcrumbItem>
         {path.map((item, index) => {
           const isLast = index === path.length - 1;
@@ -28,12 +30,12 @@ const Navigator = () => {
               <BreadcrumbSeparator className="hidden md:block" />
               {isLast ? (
                 <BreadcrumbPage key={index} className="hidden md:block">
-                  {item.toUpperCase()}
+                  {item[0].toUpperCase() + item.slice(1)}
                 </BreadcrumbPage>
               ) : (
                 <BreadcrumbItem key={index} className="hidden md:block">
                   <BreadcrumbLink href={`/${item}`}>
-                    {item.toUpperCase()}
+                    {item[0].toUpperCase() + item.slice(1)}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               )}
