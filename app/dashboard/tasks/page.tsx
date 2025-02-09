@@ -1,7 +1,7 @@
 import React from "react";
 
 const Tasks = () => {
-  return <div>Blogs Tasks</div>;
+  return <main className="flex-1 p-6 bg-white ">Blogs Tasks</main>;
 };
 
 export default Tasks;
