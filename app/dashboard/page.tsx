@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/sidebar/sidebar";
 const mockColumns = [
   {
     name: "Not Started",

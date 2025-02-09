@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BookOpen,
   FileText,
@@ -8,86 +7,45 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { cn } from "@/lib/utils";
-
-interface SidebarItemProps {
-  label: string;
-  key: string;
-  color?: string;
-  children: React.ReactNode;
-}
-
-const SidebarItem: React.FC<SidebarItemProps> = ({
-  label,
-  color,
-  children,
-}) => (
-  <li
-    className={cn(
-      "flex items-center gap-2 py-1 px-2 text-sm cursor-pointer rounded-md transition-colors duration-200",
-      color ? color : "text-gray-600"
-    )}
-  >
-    {children}
-    {label}
-  </li>
-);
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { SidebarItem } from "./sidebar-item";
 
 const sidebarItems = [
   {
     key: "projects",
-    icon: (
-      <div className="animate-in">
-        <Folder className="w-4 h-4" />
-      </div>
-    ),
+    icon: <Folder className="w-4 h-4" />,
     label: "Projects",
+    href: "/dashboard/projects",
   },
   {
     key: "tasks",
-    icon: (
-      <div className="animate-in">
-        <List className="w-4 h-4" />
-      </div>
-    ),
+    icon: <List className="w-4 h-4" />,
     label: "Tasks",
+    href: "/dashboard/tasks",
   },
   {
     key: "blogs",
-    icon: (
-      <div className="animate-in">
-        <BookOpen className="w-4 h-4" />
-      </div>
-    ),
+    icon: <BookOpen className="w-4 h-4" />,
     label: "Blogs",
+    href: "/dashboard/blogs",
   },
   {
     key: "resources",
-    icon: (
-      <div className="animate-in">
-        <FileText className="w-4 h-4" />
-      </div>
-    ),
+    icon: <FileText className="w-4 h-4" />,
     label: "Resources",
+    href: "/dashboard/resources",
   },
   {
     key: "notes",
-    icon: (
-      <div className="animate-in">
-        <NotebookPen className="w-4 h-4" />
-      </div>
-    ),
+    icon: <NotebookPen className="w-4 h-4" />,
     label: "Notes",
+    href: "/dashboard/notes",
   },
   {
     key: "settings",
-    icon: (
-      <div className="animate-in">
-        <Settings className="w-4 h-4" />
-      </div>
-    ),
+    icon: <Settings className="w-4 h-4" />,
     label: "Settings",
+    href: "/dashboard/settings",
   },
 ];
 
@@ -113,14 +71,19 @@ const Sidebar = () => {
         </div>
         <ul className="space-y-2">
           {sidebarItems.map((item) => (
-            <SidebarItem key={item.key} label={item.label}>
+            <SidebarItem key={item.key} label={item.label} href={item.href}>
               {item.icon}
             </SidebarItem>
           ))}
         </ul>
       </div>
       <div>
-        <SidebarItem key="logout" label="Logout" color="text-red-600 text-md">
+        <SidebarItem
+          key="logout"
+          label="Logout"
+          color="text-red-600 text-md"
+          href="/logout"
+        >
           <LogOut className="w-5 h-5" />
         </SidebarItem>
       </div>
