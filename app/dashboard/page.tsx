@@ -54,7 +54,10 @@ const Dashboard = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-6 p-2 px-4">
           <div className="relative w-1/3">
-            <Input placeholder="Find a project" className="w-full text-sm pl-10" />
+            <Input
+              placeholder="Find a project"
+              className="w-full text-sm pl-10"
+            />
             <Search
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={16}
@@ -115,9 +118,21 @@ function Column({
             stage.color
           )}
         >
-          <span
-            className={cn("w-3 h-3 rounded-full block animate-pulse", stage.dotColor)}
-          ></span>
+          <span className="relative flex w-3 h-3">
+            <span
+              className={cn(
+                "absolute inline-flex h-full w-full animate-ping rounded-full",
+                stage.dotColor,
+                "opacity-75"
+              )}
+            ></span>
+            <span
+              className={cn(
+                "relative inline-flex w-3 h-3 rounded-full",
+                stage.dotColor
+              )}
+            ></span>
+          </span>
           <span className="ml-2">{stage.name}</span>
         </h2>
         <div className={cn("flex gap-2")}>
