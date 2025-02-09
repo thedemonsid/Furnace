@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -16,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Sidebar from "@/components/sidebar";
 const mockColumns = [
   {
     name: "Not Started",
@@ -50,45 +46,21 @@ const mockColumns = [
 ];
 const Dashboard = () => {
   return (
-    <div className="flex h-screen font-mono">
+    <div className="flex h-screen font-mono m-0">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-100 p-4 border-r">
-        <h1 className="text-lg font-bold mb-4">Project Management</h1>
-        <ul className="space-y-4">
-          <li
-            key="projects"
-            className="text-gray-700 font-medium cursor-pointer text-sm"
-          >
-            Projects
-          </li>
-          <li key="tasks" className="text-gray-600 cursor-pointer text-sm">
-            Tasks
-          </li>
-          <li
-            key="time-tracking"
-            className="text-gray-600 cursor-pointer text-sm"
-          >
-            Time Tracking
-          </li>
-          <li key="timesheets" className="text-gray-600 cursor-pointer text-sm">
-            Timesheets
-          </li>
-          <li key="resourcing" className="text-gray-600 cursor-pointer text-sm">
-            Resourcing
-          </li>
-        </ul>
-      </aside>
-
+      <Sidebar></Sidebar>
       {/* Main Content */}
       <main className="flex-1 p-6 bg-white">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6 p-2">
+        <div className="flex justify-between items-center mb-6 p-2 px-4">
           <Input placeholder="Find a project" className="w-1/3 text-sm" />
           <div className="flex space-x-4">
             <Button variant="outline" className="text-sm">
               Filter
             </Button>
-            <Button className="text-sm">New Project</Button>
+            <Button className="text-sm bg-green-400 text-black hover:bg-green-500">
+              New Project
+            </Button>
           </div>
         </div>
 
@@ -159,14 +131,13 @@ function Column({
           </Menu>
         </div>
       </div>
-      {stage.name === "Not Started" && (
-        <ProjectCard
-          project={{
-            name: "Project 1",
-            description: "This is a sample project",
-          }}
-        />
-      )}
+
+      <ProjectCard
+        project={{
+          name: "Project 1",
+          description: "This is a sample project",
+        }}
+      />
       <Button
         variant="link"
         className="text-xs text-gray-400 font-semibold hover:bg-gray-100 w-full justify-start"
