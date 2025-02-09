@@ -3,7 +3,7 @@ import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Ellipsis, Plus } from "lucide-react";
+import { Ellipsis, Plus, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,14 +46,20 @@ const mockColumns = [
 ];
 const Dashboard = () => {
   return (
-    <div className="flex h-screen font-mono m-0">
+    <div className="flex h-screen font-mono m-0 p-0">
       {/* Sidebar */}
       <Sidebar></Sidebar>
       {/* Main Content */}
       <main className="flex-1 p-6 bg-white">
         {/* Header */}
         <div className="flex justify-between items-center mb-6 p-2 px-4">
-          <Input placeholder="Find a project" className="w-1/3 text-sm" />
+          <div className="relative w-1/3">
+            <Input placeholder="Find a project" className="w-full text-sm pl-10" />
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={16}
+            />
+          </div>
           <div className="flex space-x-4">
             <Button variant="outline" className="text-sm">
               Filter

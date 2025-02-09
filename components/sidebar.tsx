@@ -16,7 +16,7 @@ interface SidebarItemProps {
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label }) => (
-  <li className="text-gray-600 cursor-pointer text-sm flex items-center gap-2 py-1 rounded-md hover:bg-slate-50">
+  <li className="text-gray-600 cursor-pointer text-sm flex items-center gap-2 py-1 rounded-md hover:bg-slate-100 px-2">
     <Icon className="w-4 h-4" />
     {label}
   </li>
@@ -33,9 +33,9 @@ const sidebarItems = [
 
 const Sidebar = () => {
   return (
-    <aside className="min-w-48 bg-gray-100/5 py-8 px-4 border-r">
+    <aside className="min-w-56 bg-gray-100/5 py-8 px-2 border-r">
       <h1 className="font-mono font-bold mb-4 py-2 text-sm">
-        <span className="py-4">Project Management</span>
+        <span className="py-4 tracking-tight px-2">Project Management</span>
       </h1>
       <ul className="space-y-2">
         {sidebarItems.map((item) => (
