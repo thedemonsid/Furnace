@@ -6,20 +6,34 @@ import {
   List,
   NotebookPen,
   Settings,
+  LogOut,
   LucideIcon,
 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { cn } from "@/lib/utils";
 
 interface SidebarItemProps {
   icon: LucideIcon;
   label: string;
   key: string;
+  color?: string;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label }) => (
-  <li className="text-gray-600 cursor-pointer text-sm flex items-center gap-2 py-1 rounded-md hover:bg-slate-100 px-2">
+const SidebarItem: React.FC<SidebarItemProps> = ({
+  icon: Icon,
+  label,
+  color,
+}) => (
+<li
+    className={cn(
+        "flex items-center gap-2 py-1 px-2 text-sm cursor-pointer rounded-md transition-colors duration-200",
+        color ? color : "text-gray-600",
+        "hover:text-green-400"
+    )}
+>
     <Icon className="w-4 h-4" />
     {label}
-  </li>
+</li>
 );
 
 const sidebarItems = [
@@ -31,17 +45,40 @@ const sidebarItems = [
   { key: "settings", icon: Settings, label: "Settings" },
 ];
 
+const mockUser = {
+  name: "Siddhesh Shrirame",
+  email: "siddheshshrirame@gmail.com",
+  avatar: "https://avatars.githubusercontent.com/u/128967580?v=4",
+};
+
 const Sidebar = () => {
   return (
-    <aside className="min-w-56 bg-gray-100/5 py-8 px-2 border-r">
-      <h1 className="font-mono font-bold mb-4 py-2 text-sm">
-        <span className="py-4 tracking-tight px-2">Project Management</span>
-      </h1>
-      <ul className="space-y-2">
-        {sidebarItems.map((item) => (
-          <SidebarItem key={item.key} icon={item.icon} label={item.label} />
-        ))}
-      </ul>
+    <aside className="flex flex-col justify-between min-w-56 py-8 px-2 border-r bg-gray-100/5">
+      <div>
+        <div className="flex items-center gap-2 px-1 py-1.5 mb-4 text-sm">
+          <Avatar className="h-8 w-8 rounded-lg">
+            <AvatarImage src={mockUser.avatar} alt={mockUser.name} />
+            <AvatarFallback className="rounded-lg">JD</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 grid text-left leading-tight">
+            <span className="truncate font-semibold">{mockUser.name}</span>
+            <span className="truncate text-xs">{mockUser.email}</span>
+          </div>
+        </div>
+        <ul className="space-y-2">
+          {sidebarItems.map((item) => (
+            <SidebarItem key={item.key} icon={item.icon} label={item.label} />
+          ))}
+        </ul>
+      </div>
+      <div>
+        <SidebarItem
+          key="logout"
+          icon={LogOut}
+          label="Logout"
+          color="text-red-600"
+        />
+      </div>
     </aside>
   );
 };
