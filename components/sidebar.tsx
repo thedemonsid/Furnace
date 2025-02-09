@@ -35,60 +35,60 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 );
 
 const sidebarItems = [
-    {
-        key: "projects",
-        icon: (
-            <div className="animate-in">
-                <Folder className="w-4 h-4" />
-            </div>
-        ),
-        label: "Projects",
-    },
-    {
-        key: "tasks",
-        icon: (
-            <div className="animate-in">
-                <List className="w-4 h-4" />
-            </div>
-        ),
-        label: "Tasks",
-    },
-    {
-        key: "blogs",
-        icon: (
-            <div className="animate-in">
-                <BookOpen className="w-4 h-4" />
-            </div>
-        ),
-        label: "Blogs",
-    },
-    {
-        key: "resources",
-        icon: (
-            <div className="animate-in">
-                <FileText className="w-4 h-4" />
-            </div>
-        ),
-        label: "Resources",
-    },
-    {
-        key: "notes",
-        icon: (
-            <div className="animate-in">
-                <NotebookPen className="w-4 h-4" />
-            </div>
-        ),
-        label: "Notes",
-    },
-    {
-        key: "settings",
-        icon: (
-            <div className="animate-in">
-                <Settings className="w-4 h-4" />
-            </div>
-        ),
-        label: "Settings",
-    },
+  {
+    key: "projects",
+    icon: (
+      <div className="animate-in">
+        <Folder className="w-4 h-4" />
+      </div>
+    ),
+    label: "Projects",
+  },
+  {
+    key: "tasks",
+    icon: (
+      <div className="animate-in">
+        <List className="w-4 h-4" />
+      </div>
+    ),
+    label: "Tasks",
+  },
+  {
+    key: "blogs",
+    icon: (
+      <div className="animate-in">
+        <BookOpen className="w-4 h-4" />
+      </div>
+    ),
+    label: "Blogs",
+  },
+  {
+    key: "resources",
+    icon: (
+      <div className="animate-in">
+        <FileText className="w-4 h-4" />
+      </div>
+    ),
+    label: "Resources",
+  },
+  {
+    key: "notes",
+    icon: (
+      <div className="animate-in">
+        <NotebookPen className="w-4 h-4" />
+      </div>
+    ),
+    label: "Notes",
+  },
+  {
+    key: "settings",
+    icon: (
+      <div className="animate-in">
+        <Settings className="w-4 h-4" />
+      </div>
+    ),
+    label: "Settings",
+  },
 ];
 
 const mockUser = {
@@ -100,15 +100,15 @@ const mockUser = {
 const Sidebar = () => {
   return (
     <aside className="flex flex-col justify-between min-w-56 py-8 px-2 border-r bg-gray-100/5">
-      <div>
-        <div className="flex items-center gap-2 px-1 py-1.5 mb-4 text-sm">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2 px-1 py-1.5 mb-4 text-sm cursor-pointer">
           <Avatar className="h-8 w-8 rounded-lg">
             <AvatarImage src={mockUser.avatar} alt={mockUser.name} />
             <AvatarFallback className="rounded-lg">JD</AvatarFallback>
           </Avatar>
-          <div className="flex-1 grid text-left leading-tight">
-            <span className="truncate font-semibold">{mockUser.name}</span>
-            <span className="truncate text-xs">{mockUser.email}</span>
+          <div className="flex-1 grid text-left font-sans">
+            <span className="font-semibold">{mockUser.name}</span>
+            <span className="text-xs">{mockUser.email}</span>
           </div>
         </div>
         <ul className="space-y-2">
@@ -120,8 +120,8 @@ const Sidebar = () => {
         </ul>
       </div>
       <div>
-        <SidebarItem key="logout" label="Logout" color="text-red-600">
-          <LogOut className="w-4 h-4" />
+        <SidebarItem key="logout" label="Logout" color="text-red-600 text-md">
+          <LogOut className="w-5 h-5" />
         </SidebarItem>
       </div>
     </aside>

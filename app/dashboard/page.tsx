@@ -46,41 +46,36 @@ const mockColumns = [
 ];
 const Dashboard = () => {
   return (
-    <div className="flex h-screen font-mono m-0 p-0">
-      {/* Sidebar */}
-      <Sidebar></Sidebar>
-      {/* Main Content */}
-      <main className="flex-1 p-6 bg-white">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6 p-2 px-4">
-          <div className="relative w-1/3">
-            <Input
-              placeholder="Find a project"
-              className="w-full text-sm pl-10"
-            />
-            <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={16}
-            />
-          </div>
-          <div className="flex space-x-4">
-            <Button variant="outline" className="text-sm">
-              Filter
-            </Button>
-            <Button className="text-sm bg-green-400 text-black hover:bg-green-500">
-              New Project
-            </Button>
-          </div>
+    <main className="flex-1 p-6 bg-white">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6 p-2 px-4">
+        <div className="relative w-1/3">
+          <Input
+            placeholder="Find a project"
+            className="w-full text-sm pl-10"
+          />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={16}
+          />
         </div>
+        <div className="flex space-x-4">
+          <Button variant="outline" className="text-sm">
+            Filter
+          </Button>
+          <Button className="text-sm bg-green-400 text-black hover:bg-green-500">
+            New Project
+          </Button>
+        </div>
+      </div>
 
-        {/* Project Columns */}
-        <div className="flex justify-start gap-2 p-2">
-          {mockColumns.map((stage, index) => (
-            <Column key={index} stage={stage} index={index} />
-          ))}
-        </div>
-      </main>
-    </div>
+      {/* Project Columns */}
+      <div className="flex justify-start gap-2 p-2">
+        {mockColumns.map((stage, index) => (
+          <Column key={index} stage={stage} index={index} />
+        ))}
+      </div>
+    </main>
   );
 };
 function Menu({ children }: { children: React.ReactNode }) {
