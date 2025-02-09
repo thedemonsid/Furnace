@@ -116,7 +116,7 @@ function Column({
           )}
         >
           <span
-            className={cn("w-3 h-3 rounded-full block", stage.dotColor)}
+            className={cn("w-3 h-3 rounded-full block animate-pulse", stage.dotColor)}
           ></span>
           <span className="ml-2">{stage.name}</span>
         </h2>

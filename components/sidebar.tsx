@@ -7,42 +7,88 @@ import {
   NotebookPen,
   Settings,
   LogOut,
-  LucideIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { cn } from "@/lib/utils";
 
 interface SidebarItemProps {
-  icon: LucideIcon;
   label: string;
   key: string;
   color?: string;
+  children: React.ReactNode;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({
-  icon: Icon,
   label,
   color,
+  children,
 }) => (
-<li
+  <li
     className={cn(
-        "flex items-center gap-2 py-1 px-2 text-sm cursor-pointer rounded-md transition-colors duration-200",
-        color ? color : "text-gray-600",
-        "hover:text-green-400"
+      "flex items-center gap-2 py-1 px-2 text-sm cursor-pointer rounded-md transition-colors duration-200",
+      color ? color : "text-gray-600"
     )}
->
-    <Icon className="w-4 h-4" />
+  >
+    {children}
     {label}
-</li>
+  </li>
 );
 
 const sidebarItems = [
-  { key: "projects", icon: Folder, label: "Projects" },
-  { key: "tasks", icon: List, label: "Tasks" },
-  { key: "blogs", icon: BookOpen, label: "Blogs" },
-  { key: "resources", icon: FileText, label: "Resources" },
-  { key: "notes", icon: NotebookPen, label: "Notes" },
-  { key: "settings", icon: Settings, label: "Settings" },
+    {
+        key: "projects",
+        icon: (
+            <div className="animate-in">
+                <Folder className="w-4 h-4" />
+            </div>
+        ),
+        label: "Projects",
+    },
+    {
+        key: "tasks",
+        icon: (
+            <div className="animate-in">
+                <List className="w-4 h-4" />
+            </div>
+        ),
+        label: "Tasks",
+    },
+    {
+        key: "blogs",
+        icon: (
+            <div className="animate-in">
+                <BookOpen className="w-4 h-4" />
+            </div>
+        ),
+        label: "Blogs",
+    },
+    {
+        key: "resources",
+        icon: (
+            <div className="animate-in">
+                <FileText className="w-4 h-4" />
+            </div>
+        ),
+        label: "Resources",
+    },
+    {
+        key: "notes",
+        icon: (
+            <div className="animate-in">
+                <NotebookPen className="w-4 h-4" />
+            </div>
+        ),
+        label: "Notes",
+    },
+    {
+        key: "settings",
+        icon: (
+            <div className="animate-in">
+                <Settings className="w-4 h-4" />
+            </div>
+        ),
+        label: "Settings",
+    },
 ];
 
 const mockUser = {
@@ -67,17 +113,16 @@ const Sidebar = () => {
         </div>
         <ul className="space-y-2">
           {sidebarItems.map((item) => (
-            <SidebarItem key={item.key} icon={item.icon} label={item.label} />
+            <SidebarItem key={item.key} label={item.label}>
+              {item.icon}
+            </SidebarItem>
           ))}
         </ul>
       </div>
       <div>
-        <SidebarItem
-          key="logout"
-          icon={LogOut}
-          label="Logout"
-          color="text-red-600"
-        />
+        <SidebarItem key="logout" label="Logout" color="text-red-600">
+          <LogOut className="w-4 h-4" />
+        </SidebarItem>
       </div>
     </aside>
   );
