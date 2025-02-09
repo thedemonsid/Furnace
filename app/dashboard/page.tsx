@@ -9,6 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Ellipsis, Plus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 const mockColumns = [
   {
     name: "Not Started",
@@ -95,7 +102,25 @@ const Dashboard = () => {
     </div>
   );
 };
-
+function Menu({ children }: { children: React.ReactNode }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
+      <DropdownMenuContent className="pr-4 ml-8">
+        <DropdownMenuItem className="font-mono text-xs font-semibold opacity-75 focus:text-green-500 focus:bg-white focus:opacity-100">
+          Edit Column
+        </DropdownMenuItem>
+        <DropdownMenuItem className="font-mono text-xs font-semibold opacity-75 focus:text-green-500 focus:bg-white focus:opacity-100">
+          Add Column
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="font-mono text-xs font-semibold opacity-75 focus:text-red-500 focus:bg-white focus:opacity-100">
+          Delete Column
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 function Column({
   stage,
   index,
@@ -118,16 +143,20 @@ function Column({
           <span className="ml-2">{stage.name}</span>
         </h2>
         <div className={cn("flex gap-2")}>
-          <Plus
-            size={18}
-            strokeWidth={1}
-            className="cursor-pointer transform hover:bg-gray-100 m-1 rounded-sm"
-          ></Plus>
-          <Ellipsis
-            size={18}
-            strokeWidth={1}
-            className="cursor-pointer transform hover:bg-gray-100 m-1 rounded-sm"
-          ></Ellipsis>
+          <Menu>
+            <Plus
+              size={18}
+              strokeWidth={1}
+              className="cursor-pointer transform hover:bg-gray-100 m-1 rounded-sm"
+            ></Plus>
+          </Menu>
+          <Menu>
+            <Ellipsis
+              size={18}
+              strokeWidth={1}
+              className="cursor-pointer transform hover:bg-gray-100 m-1 rounded-sm"
+            ></Ellipsis>
+          </Menu>
         </div>
       </div>
       {stage.name === "Not Started" && (
