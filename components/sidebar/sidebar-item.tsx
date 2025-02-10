@@ -32,7 +32,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
       className={cn(
         "flex items-center gap-2 py-1 px-2 text-sm cursor-pointer rounded-md transition-colors duration-200",
         color ? color : "text-gray-600",
-        isActive ? "bg-green-100" : "hover:bg-gray-100"
+        isActive ? "text-black bg-slate-50" : "hover:text-black"
       )}
     >
       {children}

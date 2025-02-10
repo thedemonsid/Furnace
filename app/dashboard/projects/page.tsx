@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Sidebar from "@/components/sidebar/sidebar";
 const mockColumns = [
   {
     name: "Not Started",
@@ -63,14 +62,14 @@ const Dashboard = () => {
           <Button variant="outline" className="text-sm">
             Filter
           </Button>
-          <Button className="text-sm bg-green-400 text-black hover:bg-green-500">
+          <Button className="text-sm bg-green-300 text-black hover:bg-green-400">
             New Project
           </Button>
         </div>
       </div>
 
       {/* Project Columns */}
-      <div className="flex justify-start gap-2 p-2">
+      <div className="flex justify-start gap-4 p-2">
         {mockColumns.map((stage, index) => (
           <Column key={index} stage={stage} index={index} />
         ))}
@@ -151,6 +150,12 @@ function Column({
       <ProjectCard
         project={{
           name: "Project 1",
+          description: "This is a sample project",
+        }}
+      />
+        <ProjectCard
+        project={{
+          name: "Project 2",
           description: "This is a sample project",
         }}
       />
