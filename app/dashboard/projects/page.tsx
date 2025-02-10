@@ -3,7 +3,7 @@ import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Ellipsis, Plus, Search } from "lucide-react";
+import { Ellipsis, GripHorizontal, Plus, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,30 +17,85 @@ const mockColumns = [
     color: "bg-blue-100",
     dotColor: "bg-blue-400",
     count: 1,
+    projects: [
+      {
+        name: "Authentication System",
+        description: "Implement user authentication and authorization",
+      },
+      {
+        name: "Database Schema Design",
+        description: "Design the database schema for the application",
+      },
+      {
+        name: "API Documentation",
+        description: "Create comprehensive API documentation",
+      },
+    ],
   },
   {
     name: "Planning",
     color: "bg-orange-100",
     dotColor: "bg-orange-400",
     count: 0,
+    projects: [
+      {
+        name: "UI/UX Design",
+        description: "Design the user interface and user experience",
+      },
+      {
+        name: "Project Roadmap",
+        description: "Create a detailed project roadmap",
+      },
+    ],
   },
   {
     name: "Awaiting Kick Off",
     color: "bg-green-100",
     dotColor: "bg-green-400",
     count: 0,
+    projects: [
+      { name: "Server Setup", description: "Set up the server infrastructure" },
+    ],
   },
   {
     name: "In Progress",
     color: "bg-purple-100",
     dotColor: "bg-purple-400",
     count: 0,
+    projects: [
+      {
+        name: "Frontend Development",
+        description: "Develop the frontend of the application",
+      },
+      {
+        name: "Backend Development",
+        description: "Develop the backend of the application",
+      },
+      {
+        name: "Integration Testing",
+        description: "Perform integration testing",
+      },
+      {
+        name: "Continuous Deployment",
+        description: "Set up continuous deployment pipeline",
+      },
+    ],
   },
   {
     name: "In Review",
     color: "bg-yellow-100",
     dotColor: "bg-yellow-400",
     count: 0,
+    projects: [
+      {
+        name: "Code Review",
+        description: "Review the code for quality and standards",
+      },
+      {
+        name: "User Acceptance Testing",
+        description: "Conduct user acceptance testing",
+      },
+    ],
   },
 ];
 const Dashboard = () => {
@@ -71,7 +126,12 @@ const Dashboard = () => {
       {/* Project Columns */}
       <div className="flex justify-start gap-4 p-2">
         {mockColumns.map((stage, index) => (
-          <Column key={index} stage={stage} index={index} />
+          <Column
+            key={index}
+            stage={stage}
+            index={index}
+            projects={stage.projects}
+          />
         ))}
       </div>
     </main>
@@ -99,9 +159,11 @@ function Menu({ children }: { children: React.ReactNode }) {
 function Column({
   stage,
   index,
+  projects,
 }: {
   stage: { name: string; color: string; dotColor: string };
   index: number;
+  projects: { name: string; description: string }[];
 }) {
   return (
     <div key={index} className="p-4 min-w-72 flex flex-col gap-4">
@@ -147,18 +209,10 @@ function Column({
         </div>
       </div>
 
-      <ProjectCard
-        project={{
-          name: "Project 1",
-          description: "This is a sample project",
-        }}
-      />
-        <ProjectCard
-        project={{
-          name: "Project 2",
-          description: "This is a sample project",
-        }}
-      />
+      {/* Projects */}
+      {projects.map((project, index) => (
+        <ProjectCard key={index} project={project} />
+      ))}
       <Button
         variant="link"
         className="text-xs text-gray-400 font-semibold hover:bg-gray-100 w-full justify-start"
@@ -177,7 +231,10 @@ function ProjectCard({
   return (
     <Card className="cursor-pointer hover:shadow-md border border-gray-200 hover:border-gray-400 transform hover:scale-105 transition-transform duration-700">
       <CardHeader className="p-4">
-        <h3 className="font-bold text-sm py-1">{project.name}</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="font-bold text-sm py-1">{project.name}</h3>
+          <GripHorizontal className="w-5 h-5 text-gray-400 hover:cursor-grab hover:text-gray-700"></GripHorizontal>
+        </div>
         {/* Card Description */}
         <CardDescription>
           <p className="text-gray-500 text-xs m-0 p-0">{project.description}</p>

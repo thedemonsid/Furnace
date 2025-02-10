@@ -81,7 +81,7 @@ const Sidebar = () => {
         <SidebarItem
           key="logout"
           label="Logout"
-          color="text-red-600 text-md"
+          color="text-red-600"
           href="/logout"
         >
           <LogOut className="w-5 h-5" />
