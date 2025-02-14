@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Column } from "./column";
 import { Search } from "lucide-react";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+
 const mockColumns = [
   {
     name: "Not Started",
@@ -89,12 +91,13 @@ const mockColumns = [
     ],
   },
 ];
+
 const ProjectComponent = () => {
   return (
-    <main className="flex-1 p-6 bg-white">
+    <main className="flex flex-col justify-start p-6 bg-white">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6 p-2 px-4">
-        <div className="relative w-1/3">
+      <div className="flex flex-wrap justify-between items-center mb-6 p-2 px-4 w-full">
+        <div className="relative w-full md:w-1/3 mb-4 md:mb-0">
           <Input
             placeholder="Find a project"
             className="w-full text-sm pl-10"
@@ -115,16 +118,19 @@ const ProjectComponent = () => {
       </div>
 
       {/* Project Columns */}
-      <div className="flex justify-start gap-4 p-2">
-        {mockColumns.map((stage, index) => (
-          <Column
-            key={index}
-            stage={stage}
-            index={index}
-            projects={stage.projects}
-          />
-        ))}
-      </div>
+      <ScrollArea className="w-full rounded-md border">
+        <div className="flex flex-wrap justify-start gap-4 p-2">
+          {mockColumns.map((stage, index) => (
+            <Column
+              key={index}
+              stage={stage}
+              index={index}
+              projects={stage.projects}
+            />
+          ))}
+        </div>
+        <ScrollBar hidden orientation={"horizontal"} />
+      </ScrollArea>
     </main>
   );
 };
