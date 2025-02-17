@@ -32,13 +32,19 @@ export function Column({
   stage,
   index,
   projects,
+  zoom,
 }: {
   stage: { name: string; color: string; dotColor: string };
   index: number;
   projects: { name: string; description: string }[];
+  zoom: number;
 }) {
   return (
-    <div key={index} className="p-4 min-w-72 flex flex-col gap-4">
+    <div
+      key={index}
+      className="p-4 min-w-72 flex flex-col gap-4 h-fit"
+      style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}
+    >
       <div className="flex justify-start gap-2 items-center mb-4">
         <h2
           className={cn(

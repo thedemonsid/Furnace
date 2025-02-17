@@ -1,7 +1,9 @@
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Column } from "./column";
-import { Search } from "lucide-react";
+import { Search, ZoomIn, ZoomOut } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 const mockColumns = [
@@ -93,6 +95,16 @@ const mockColumns = [
 ];
 
 const ProjectComponent = () => {
+  const [zoom, setZoom] = useState(1);
+
+  const handleZoomIn = () => {
+    setZoom((prevZoom) => Math.min(prevZoom + 0.1, 2));
+  };
+
+  const handleZoomOut = () => {
+    setZoom((prevZoom) => Math.max(prevZoom - 0.1, 0.5));
+  };
+
   return (
     <main className="flex flex-col justify-start p-6 bg-white">
       {/* Header */}
@@ -108,6 +120,12 @@ const ProjectComponent = () => {
           />
         </div>
         <div className="flex space-x-4">
+          <Button variant="outline" className="text-sm" onClick={handleZoomOut}>
+            <ZoomOut className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" className="text-sm" onClick={handleZoomIn}>
+            <ZoomIn className="w-4 h-4" />
+          </Button>
           <Button variant="outline" className="text-sm">
             Filter
           </Button>
@@ -119,13 +137,17 @@ const ProjectComponent = () => {
 
       {/* Project Columns */}
       <ScrollArea className="w-full rounded-md border">
-        <div className="flex flex-wrap justify-start gap-4 p-2">
-          {mockColumns.map((stage, index) => (
+        <div
+          className="flex flex-wrap justify-around gap-4 p-2"
+          style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}
+        >
+          {[...mockColumns,...mockColumns].map((stage, index) => (
             <Column
               key={index}
               stage={stage}
               index={index}
               projects={stage.projects}
+              zoom={zoom}
             />
           ))}
         </div>
