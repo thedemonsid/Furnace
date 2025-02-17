@@ -42,10 +42,10 @@ export function Column({
   return (
     <div
       key={index}
-      className="p-4 min-w-72 flex flex-col gap-4 h-fit"
+      className="p-4 min-w-72 flex flex-col gap-4 h-fit max-w-80"
       style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}
     >
-      <div className="flex justify-start gap-2 items-center mb-4">
+      <div className="flex justify-between gap-2 items-center mb-4">
         <h2
           className={cn(
             "font-mono px-2 py-1 rounded-md flex justify-start items-center gap-1 text-sm w-3/4 cursor-move",
@@ -70,13 +70,6 @@ export function Column({
           <span className="ml-2">{stage.name}</span>
         </h2>
         <div className={cn("flex gap-2")}>
-          <Menu>
-            <Plus
-              size={18}
-              strokeWidth={1}
-              className="cursor-pointer transform hover:bg-gray-100 m-1 rounded-sm"
-            ></Plus>
-          </Menu>
           <Menu>
             <Ellipsis
               size={18}

@@ -106,7 +106,7 @@ const ProjectComponent = () => {
   };
 
   return (
-    <main className="flex flex-col justify-start p-6 bg-white">
+    <main className="flex flex-col justify-start p-6 bg-white h-screen">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center mb-6 p-2 px-4 w-full">
         <div className="relative w-full md:w-1/3 mb-4 md:mb-0">
@@ -136,19 +136,21 @@ const ProjectComponent = () => {
       </div>
 
       {/* Project Columns */}
-      <ScrollArea className="w-full rounded-md border">
-        <div
-          className="flex flex-wrap justify-around gap-4 p-2"
-          style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}
-        >
-          {[...mockColumns,...mockColumns].map((stage, index) => (
-            <Column
+      <ScrollArea className="w-full h-full rounded-md border">
+        <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-4 p-2">
+          {[...mockColumns, ...mockColumns].map((stage, index) => (
+            <div
               key={index}
-              stage={stage}
-              index={index}
-              projects={stage.projects}
-              zoom={zoom}
-            />
+              className="break-inside-avoid transition-transform h-fit"
+              style={{ transform: `scale(${zoom})` }}
+            >
+              <Column
+                stage={stage}
+                index={index}
+                projects={stage.projects}
+                zoom={zoom}
+              />
+            </div>
           ))}
         </div>
         <ScrollBar hidden orientation={"horizontal"} />
