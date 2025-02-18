@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Sidebar from "@/components/sidebar/sidebar";
 const mockColumns = [
   {
     name: "Not Started",
@@ -46,7 +45,7 @@ const mockColumns = [
 ];
 const Dashboard = () => {
   return (
-    <main className="flex-1 p-6 bg-white">
+    <main className="flex-1 p-6 bg-background">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 p-2 px-4">
         <div className="relative w-1/3">

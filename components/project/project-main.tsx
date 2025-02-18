@@ -12,7 +12,7 @@ const ProjectComponent = () => {
     useProjectManager();
 
   return (
-    <main className="flex flex-col justify-start p-6 bg-white h-screen">
+    <main className="flex flex-col justify-start p-6 bg-background text-foreground h-screen">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center mb-6 p-2 px-4 w-full">
         <div className="flex space-x-4 w-full md:w-1/2 mb-4 md:mb-0">
