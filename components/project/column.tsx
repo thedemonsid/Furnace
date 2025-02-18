@@ -1,4 +1,4 @@
-import { Ellipsis, Plus } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 import { Button } from "../ui/button";
 import { ProjectCard } from "./project-card";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+
 function Menu({ children }: { children: React.ReactNode }) {
   return (
     <DropdownMenu>
@@ -26,6 +37,38 @@ function Menu({ children }: { children: React.ReactNode }) {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+function MyDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger>
+        <div className="text-xs text-gray-400 font-semibold hover:bg-gray-100 w-full justify-start px-2 py-1 rounded-lg">
+          + New Project
+        </div>
+      </DialogTrigger>
+      <DialogContent className="font-mono">
+        <DialogHeader>
+          <DialogTitle>New Project</DialogTitle>
+          <DialogDescription>Add a new project to the column</DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-4">
+          <Input
+            type="text"
+            placeholder="Project Name"
+            className="border border-green-300 rounded-md p-2"
+          />
+          <Textarea
+            placeholder="Project Description"
+            className="border border-green-300 rounded-md p-2"
+          ></Textarea>
+          <Button className="bg-green-300 text-black hover:bg-green-400">
+            Create Project
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 export function Column({
@@ -84,12 +127,7 @@ export function Column({
       {projects.map((project, index) => (
         <ProjectCard key={index} project={project} />
       ))}
-      <Button
-        variant="link"
-        className="text-xs text-gray-400 font-semibold hover:bg-gray-100 w-full justify-start"
-      >
-        + New Project
-      </Button>
+      <MyDialog />
     </div>
   );
 }
