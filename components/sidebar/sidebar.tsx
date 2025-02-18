@@ -1,22 +1,16 @@
-"use client";
-
-import * as React from "react";
 import {
   BookOpen,
-  ChevronRight,
   FileText,
   Folder,
   List,
   NotebookPen,
-  PanelLeft,
-  PanelLeftClose,
   Settings,
 } from "lucide-react";
-import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { TooltipProvider } from "../ui/tooltip";
+import { NavItem } from "./sidebar-item";
 
 interface SidebarProps {
   className?: string;
@@ -69,22 +63,24 @@ const mockUser = {
 
 export function Sidebar({ className }: SidebarProps) {
   return (
-    <div className="relative flex h-screen flex-col gap-4 bg-sidebar-background p-4 text-sidebar-foreground w-[60px]">
+    <div className="relative flex h-screen flex-col gap-4 bg-sidebar-background p-4 text-sidebar-foreground w-[60px] border">
       {/* Logo */}
       <div className="flex items-center justify-center">
         <img src="/favicon.ico" alt="Logo" className="h-5 w-5" />
       </div>
       {/* Navigation */}
-      <nav className="flex flex-col gap-1">
-        {sidebarItems.map((item) => (
-          <NavItem
-            key={item.key}
-            icon={item.icon}
-            label={item.label}
-            href={item.href}
-          />
-        ))}
-      </nav>
+      <TooltipProvider>
+        <nav className="flex flex-col gap-1">
+          {sidebarItems.map((item) => (
+            <NavItem
+              key={item.key}
+              icon={item.icon}
+              label={item.label}
+              href={item.href}
+            />
+          ))}
+        </nav>
+      </TooltipProvider>
       <Separator className="my-2 bg-sidebar-border" />
 
       {/* User Profile */}
@@ -95,24 +91,5 @@ export function Sidebar({ className }: SidebarProps) {
         </Avatar>
       </div>
     </div>
-  );
-}
-
-interface NavItemProps {
-  icon: React.ReactNode;
-  label: string;
-  href: string;
-}
-
-function NavItem({ icon, label, href }: NavItemProps) {
-  return (
-    <Link href={href}>
-      <Button
-        variant="ghost"
-        className={`flex w-full items-center justify-start gap-2 px-2 py-2 text-sidebar-foreground hover:text-sidebar-accent-foreground`}
-      >
-        {icon}
-      </Button>
-    </Link>
   );
 }
