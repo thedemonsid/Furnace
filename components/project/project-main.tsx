@@ -1,115 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Column } from "./column";
 import { Search, ZoomIn, ZoomOut } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-const mockColumns = [
-  {
-    name: "Not Started",
-    color: "bg-blue-100",
-    dotColor: "bg-blue-400",
-    count: 1,
-    projects: [
-      {
-        name: "Authentication System",
-        description: "Implement user authentication and authorization",
-      },
-      {
-        name: "Database Schema Design",
-        description: "Design the database schema for the application",
-      },
-      {
-        name: "API Documentation",
-        description: "Create comprehensive API documentation",
-      },
-    ],
-  },
-  {
-    name: "Planning",
-    color: "bg-orange-100",
-    dotColor: "bg-orange-400",
-    count: 0,
-    projects: [
-      {
-        name: "UI/UX Design",
-        description: "Design the user interface and user experience",
-      },
-      {
-        name: "Project Roadmap",
-        description: "Create a detailed project roadmap",
-      },
-    ],
-  },
-  {
-    name: "Awaiting Kick Off",
-    color: "bg-green-100",
-    dotColor: "bg-green-400",
-    count: 0,
-    projects: [
-      { name: "Server Setup", description: "Set up the server infrastructure" },
-    ],
-  },
-  {
-    name: "In Progress",
-    color: "bg-purple-100",
-    dotColor: "bg-purple-400",
-    count: 0,
-    projects: [
-      {
-        name: "Frontend Development",
-        description: "Develop the frontend of the application",
-      },
-      {
-        name: "Backend Development",
-        description: "Develop the backend of the application",
-      },
-      {
-        name: "Integration Testing",
-        description: "Perform integration testing",
-      },
-      {
-        name: "Continuous Deployment",
-        description: "Set up continuous deployment pipeline",
-      },
-    ],
-  },
-  {
-    name: "In Review",
-    color: "bg-yellow-100",
-    dotColor: "bg-yellow-400",
-    count: 0,
-    projects: [
-      {
-        name: "Code Review",
-        description: "Review the code for quality and standards",
-      },
-      {
-        name: "User Acceptance Testing",
-        description: "Conduct user acceptance testing",
-      },
-    ],
-  },
-];
+import { useProjectManager } from "@/hooks/use-column";
 
 const ProjectComponent = () => {
-  const [zoom, setZoom] = useState(1);
-
-  const handleZoomIn = () => {
-    setZoom((prevZoom) => Math.min(prevZoom + 0.1, 2));
-  };
-
-  const handleZoomOut = () => {
-    setZoom((prevZoom) => Math.max(prevZoom - 0.1, 0.5));
-  };
+  const { columns, zoom, handleZoomIn, handleZoomOut } = useProjectManager();
 
   return (
     <main className="flex flex-col justify-start p-6 bg-white h-screen">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center mb-6 p-2 px-4 w-full">
-        <div className="flex space-x-4 w-full md:w-1/2  mb-4 md:mb-0">
-          <div className="relative ">
+        <div className="flex space-x-4 w-full md:w-1/2 mb-4 md:mb-0">
+          <div className="relative">
             <Input
               placeholder="Find a project"
               className="w-full text-sm pl-10"
@@ -139,7 +45,7 @@ const ProjectComponent = () => {
       {/* Project Columns */}
       <ScrollArea className="w-full h-full rounded-md border">
         <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-4 p-2">
-          {[...mockColumns,...mockColumns].map((stage, index) => (
+          {[...columns, ...columns].map((stage, index) => (
             <div
               key={index}
               className="break-inside-avoid transition-transform h-fit"
