@@ -43,8 +43,8 @@ const ProjectComponent = () => {
 
       {/* Project Columns */}
       <ScrollArea className="w-full h-full rounded-md border">
-        <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-4 p-2">
-          {columns.map((stage, index) => (
+        <div className="flex flex-wrap justify-around">
+          {[...columns, ...columns].map((stage, index) => (
             <div
               key={index}
               className="break-inside-avoid transition-transform h-fit"
