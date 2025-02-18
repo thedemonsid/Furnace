@@ -112,7 +112,23 @@ export const useProjectManager = () => {
   const handleZoomOut = () => {
     setZoom((prevZoom) => Math.max(prevZoom - 0.1, 0.5));
   };
-
+  const addColumn = (column: Column) => {
+    setColumns((prevColumns) => [...prevColumns, column]);
+  };
+  const editColumn = (columnIndex: number, updatedColumn: Column) => {
+    setColumns((prevColumns) => {
+      const newColumns = [...prevColumns];
+      newColumns[columnIndex] = updatedColumn;
+      return newColumns;
+    });
+  };
+  const deleteColumn = (columnIndex: number) => {
+    setColumns((prevColumns) => {
+      const newColumns = [...prevColumns];
+      newColumns.splice(columnIndex, 1);
+      return newColumns;
+    });
+  };
   const addProject = (columnIndex: number, project: Project) => {
     setColumns((prevColumns) => {
       const newColumns = [...prevColumns];
@@ -122,7 +138,11 @@ export const useProjectManager = () => {
     });
   };
 
-  const editProject = (columnIndex: number, projectIndex: number, updatedProject: Project) => {
+  const editProject = (
+    columnIndex: number,
+    projectIndex: number,
+    updatedProject: Project
+  ) => {
     setColumns((prevColumns) => {
       const newColumns = [...prevColumns];
       newColumns[columnIndex].projects[projectIndex] = updatedProject;
@@ -147,5 +167,8 @@ export const useProjectManager = () => {
     addProject,
     editProject,
     deleteProject,
+    addColumn,
+    editColumn,
+    deleteColumn,
   };
 };
