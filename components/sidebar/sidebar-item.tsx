@@ -22,7 +22,7 @@ export function NavItem({ icon, label, href }: NavItemProps) {
           <Button
             variant="ghost"
             className={cn(
-              "flex justify-center w-full items-center  gap-2 p-2 text-sidebar-foreground hover:text-sidebar-accent-foreground",
+              "flex justify-center w-full items-center py-2 px-4 text-sidebar-foreground hover:text-sidebar-accent-foreground",
               {
                 "bg-sidebar-accent text-sidebar-accent-foreground": isActive,
               }

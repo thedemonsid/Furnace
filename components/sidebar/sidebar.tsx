@@ -63,14 +63,14 @@ const mockUser = {
 
 export function Sidebar({ className }: SidebarProps) {
   return (
-    <div className="relative flex h-screen flex-col gap-4 bg-sidebar-background p-4 text-sidebar-foreground w-[60px] border">
+    <div className="relative flex h-screen flex-col gap-4 bg-sidebar-background p-4 text-sidebar-foreground w-[60px] border pt-9">
       {/* Logo */}
       <div className="flex items-center justify-center">
         <img src="/favicon.ico" alt="Logo" className="h-5 w-5" />
       </div>
       {/* Navigation */}
       <TooltipProvider>
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-y-1">
           {sidebarItems.map((item) => (
             <NavItem
               key={item.key}
