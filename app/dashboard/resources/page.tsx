@@ -1,7 +1,8 @@
+import ResourceComponent from "@/components/resources/resource-main";
 import React from "react";
 
 const Resources = () => {
-  return <main className="flex-1 p-6 bg-white ">Resources</main >;
+  return <ResourceComponent></ResourceComponent>;
 };
 
 export default Resources;
