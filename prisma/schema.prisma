@@ -14,19 +14,41 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id String @id @default(cuid())
+
   name          String?
-  email         String    @unique
+  email         String  @unique
   emailVerified Boolean
   image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
+
+  blogs Blog[]
+
+  //!Don't modify below
+  createdAt DateTime
+  updatedAt DateTime
+  sessions  Session[]
+  accounts  Account[]
 
   @@map("user")
 }
 
+model Blog {
+  id String @id @default(cuid())
+
+  title       String
+  description String
+  imageUrl    String?
+  content     String
+  author      String //* When the blog is being created, we will assign the author for better reference from the frontend
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//! Don't modify below
 model Session {
   id        String   @id
   expiresAt DateTime
