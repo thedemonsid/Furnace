@@ -13,14 +13,22 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "../ui/dialog";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { createBlog } from "@/actions/blog/createBlog";
 import { useState } from "react";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 
-// Modified schema without requiring detailed content
+// Schema for blog creation - using a separate declaration for reusability
 const createBlogSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title is too long"),
   description: z
@@ -28,28 +36,14 @@ const createBlogSchema = z.object({
     .min(10, "Description must be at least 10 characters")
     .max(500, "Description is too long"),
   content: z.string().min(1, "Basic content template is required"),
-  imageUrl: z.string().url("Image URL must be valid").optional().nullable(),
+  imageUrl: z.string().url("Image URL must be valid").optional().nullish(),
 });
 
+// TypeScript type derived from the schema
 type FormValues = z.infer<typeof createBlogSchema>;
 
-const CreateBlogButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(createBlogSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      content: `# Your Blog Title
+// Default MDX template for new blogs
+const DEFAULT_MDX_TEMPLATE = `# Your Blog Title
 
 This is a starter template for your MDX blog.
 
@@ -68,7 +62,21 @@ MDX lets you use React components in your markdown:
 - Add interactive elements
 - Style your content with tailwind classes
 
-Happy writing!`,
+Happy writing!`;
+
+const CreateBlogButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  // Initialize form with default values
+  const form = useForm<FormValues>({
+    resolver: zodResolver(createBlogSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      content: DEFAULT_MDX_TEMPLATE,
       imageUrl: "",
     },
   });
@@ -85,28 +93,37 @@ Happy writing!`,
         setSuccess(
           `${result.message} - You can now edit the full content in the editor.`
         );
-        reset();
-        // Close dialog after successful submission (optional)
+        form.reset(); // Reset form after successful submission
+
+        // Close dialog after successful submission with a delay
         setTimeout(() => {
           setIsOpen(false);
-          // Here you could redirect to the blog editor with the new blog ID
-          // if (result.blog?.id) {
-          //   router.push(`/blogs/edit/${result.blog.id}`);
-          // }
+          // Redirect to editor could be added here
+          // if (result.blog?.id) router.push(`/blogs/edit/${result.blog.id}`);
         }, 2000);
       } else {
         setError(result.message || "Failed to create blog");
       }
     } catch (err) {
       setError("An unexpected error occurred");
-      console.error(err);
+      console.error("Blog creation error:", err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Reset error/success messages and form when dialog is closed
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setError(null);
+      setSuccess(null);
+      if (!isSubmitting) form.reset();
+    }
+    setIsOpen(open);
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="default">New Blog</Button>
       </DialogTrigger>
@@ -119,79 +136,114 @@ Happy writing!`,
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
-          <div className="grid gap-2">
-            <Label htmlFor="title" className="text-left">
-              Title
-            </Label>
-            <Input
-              id="title"
-              placeholder="Enter a catchy title"
-              {...register("title")}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 py-4"
+          >
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter a catchy title" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Choose a clear, engaging title for your blog post.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.title && (
-              <p className="text-sm text-red-500">{errors.title.message}</p>
-            )}
-          </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="description" className="text-left">
-              Description
-            </Label>
-            <Textarea
-              id="description"
-              placeholder="Brief summary of your blog (min 10 characters)"
-              className="min-h-[80px]"
-              {...register("description")}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Brief summary of your blog (min 10 characters)"
+                      className="min-h-[80px] resize-y"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Write a short description to attract readers (10-500
+                    characters).
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.description && (
-              <p className="text-sm text-red-500">
-                {errors.description.message}
+
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Featured Image URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://example.com/image.jpg"
+                      {...field}
+                      value={field.value ?? ""}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Add a link to an image that represents your blog (optional).
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Hidden content field - not shown to user but included in form */}
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => <input type="hidden" {...field} />}
+            />
+
+            <div className="bg-muted p-4 rounded-md">
+              <p className="text-sm mb-2 font-medium">Content Editing</p>
+              <p className="text-xs text-muted-foreground">
+                After creating your blog, you&apos;ll be able to edit the full
+                content using our MDX editor. This will allow you to format
+                text, add code blocks, and include interactive components.
               </p>
+            </div>
+
+            {error && (
+              <div className="text-sm p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive">
+                {error}
+              </div>
             )}
-          </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="imageUrl" className="text-left">
-              Featured Image URL (optional)
-            </Label>
-            <Input
-              id="imageUrl"
-              placeholder="https://example.com/image.jpg"
-              {...register("imageUrl")}
-            />
-            {errors.imageUrl && (
-              <p className="text-sm text-red-500">{errors.imageUrl.message}</p>
+            {success && (
+              <div className="text-sm p-3 bg-green-500/10 border border-green-500/20 rounded-md text-green-500">
+                {success}
+              </div>
             )}
-          </div>
 
-          <div className="bg-muted p-4 rounded-md">
-            <p className="text-sm mb-2 font-medium">Content Editing</p>
-            <p className="text-xs text-muted-foreground">
-              After creating your blog, you&apos;ll be able to edit the full
-              content using our MDX editor. This will allow you to format text,
-              add code blocks, and include interactive components.
-            </p>
-            <input type="hidden" {...register("content")} />
-          </div>
-
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          {success && <p className="text-sm text-green-500">{success}</p>}
-
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create Blog"}
-            </Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOpenChange(false)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Creating..." : "Create Blog"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

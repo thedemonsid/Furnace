@@ -30,7 +30,7 @@ const BlogsComponent = async () => {
           <CreateBlogButton></CreateBlogButton>
         </div>
       </div>
-      <div className="flex justify-between flex-wrap gap-y-4">
+      <div className="flex justify-between flex-wrap gap-4 p-2">
         {blogs?.map((blog) => (
           <BlogCard
             key={blog.id}
