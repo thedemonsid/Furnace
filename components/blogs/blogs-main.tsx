@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { Button } from "../ui/button";
 import BlogCard from "./blog-card";
 import { getAllBlogsOfUser } from "@/actions/blog/getBlogs";
+import CreateBlogButton from "./create-blog";
 
 const BlogsComponent = async () => {
   const { blogs } = await getAllBlogsOfUser();
@@ -26,7 +27,7 @@ const BlogsComponent = async () => {
           </Button>
         </div>
         <div className="flex space-x-4">
-          <Button>Add Resource</Button>
+          <CreateBlogButton></CreateBlogButton>
         </div>
       </div>
       <div className="flex justify-between flex-wrap gap-y-4">
@@ -35,6 +36,7 @@ const BlogsComponent = async () => {
             key={blog.id}
             title={blog.title}
             description={blog.description}
+            content={blog.content}
             imageUrl={blog.imageUrl || "/image.png"}
             link="https://nextjs.org/docs/pages/api-reference/components/link"
             category="none"

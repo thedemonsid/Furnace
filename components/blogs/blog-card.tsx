@@ -16,6 +16,7 @@ import Link from "next/link";
 interface BlogCardProps {
   title: string;
   description: string;
+  content: string;
   imageUrl: string;
   category: string;
   link: string;
@@ -24,6 +25,7 @@ interface BlogCardProps {
 const BlogCard = ({
   title,
   description,
+  content,
   imageUrl,
   category,
   link,
@@ -54,9 +56,7 @@ const BlogCard = ({
       </CardHeader>
 
       <CardContent className="pb-2 flex-grow">
-        <p className="text-sm text-muted-foreground line-clamp-3">
-          {description}
-        </p>
+        <p className="text-sm text-muted-foreground line-clamp-3">{content}</p>
       </CardContent>
 
       <CardFooter className="pt-2 flex justify-between">
