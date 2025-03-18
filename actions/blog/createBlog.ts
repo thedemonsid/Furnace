@@ -12,7 +12,7 @@ const createBlogSchema = z.object({
     .max(500, "Description is too long"),
   content: z.string().min(50, "Content must be at least 50 characters"),
   imageUrl: z.string().url("Image URL must be valid").optional().nullable(),
-  author: z.string().min(1, "Author name is required"),
+  // author: z.string().min(1, "Author name is required"),
 });
 
 export const createBlog = async (
@@ -46,7 +46,7 @@ export const createBlog = async (
         description: validatedData.description,
         content: validatedData.content,
         imageUrl: validatedData.imageUrl || null,
-        author: validatedData.author,
+        author: session.user.name,
         userId: session.user.id,
       },
     });

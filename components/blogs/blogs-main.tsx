@@ -3,8 +3,10 @@ import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { Button } from "../ui/button";
 import BlogCard from "./blog-card";
+import { getAllBlogsOfUser } from "@/actions/blog/getBlogs";
 
-const BlogsComponent = () => {
+const BlogsComponent = async () => {
+  const { blogs } = await getAllBlogsOfUser();
   return (
     <main className="flex flex-col justify-start w-full p-6 bg-background text-foreground h-screen">
       <div className="flex flex-wrap justify-between items-center mb-6 p-2 px-4 w-full">
@@ -28,12 +30,12 @@ const BlogsComponent = () => {
         </div>
       </div>
       <div className="flex justify-between flex-wrap gap-y-4">
-        {Array.from({ length: 10 }).map((_, index) => (
+        {blogs?.map((blog) => (
           <BlogCard
-            key={index}
-            title={`My Card ${index + 1}`}
-            description="Basic description for the resources"
-            imageUrl="/image.png"
+            key={blog.id}
+            title={blog.title}
+            description={blog.description}
+            imageUrl={blog.imageUrl || "/image.png"}
             link="https://nextjs.org/docs/pages/api-reference/components/link"
             category="none"
           />
