@@ -57,6 +57,58 @@ export const useProjectManager = () => {
     });
   };
 
+  const moveProject = (
+    sourceColumnIndex: number,
+    projectIndex: number,
+    destinationColumnIndex: number
+  ) => {
+    setColumns((prevColumns) => {
+      try {
+        // Create a deep copy to avoid reference issues
+        const newColumns = JSON.parse(JSON.stringify(prevColumns));
+
+        // Check if indices are valid
+        if (
+          sourceColumnIndex < 0 ||
+          sourceColumnIndex >= newColumns.length ||
+          projectIndex < 0 ||
+          projectIndex >=
+            (newColumns[sourceColumnIndex]?.projects?.length || 0) ||
+          destinationColumnIndex < 0 ||
+          destinationColumnIndex >= newColumns.length
+        ) {
+          console.error("Invalid indices:", {
+            sourceColumnIndex,
+            projectIndex,
+            destinationColumnIndex,
+          });
+          return prevColumns;
+        }
+
+        // Get the project to move
+        const projectToMove =
+          newColumns[sourceColumnIndex].projects[projectIndex];
+
+        // Ensure we're not moving an empty project
+        if (!projectToMove || Object.keys(projectToMove).length === 0) {
+          console.error("Attempting to move an empty project");
+          return prevColumns;
+        }
+
+        // Remove from source column
+        newColumns[sourceColumnIndex].projects.splice(projectIndex, 1);
+
+        // Add to destination column
+        newColumns[destinationColumnIndex].projects.push(projectToMove);
+
+        return newColumns;
+      } catch (error) {
+        console.error("Error in moveProject:", error);
+        return prevColumns;
+      }
+    });
+  };
+
   return {
     columns,
     zoom,
@@ -68,5 +120,6 @@ export const useProjectManager = () => {
     addColumn,
     editColumn,
     deleteColumn,
+    moveProject,
   };
 };

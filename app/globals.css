@@ -8,73 +8,75 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
+    /* Light Mode Theme */
+    --background: 350 100% 98%; /* bg-pink-50 */
+    --foreground: 240 10% 3.9%; /* text-black/gray-900 */
+    --card: 0 0% 100%; /* bg-white */
+    --card-foreground: 240 10% 3.9%; /* text-black/gray-900 */
+    --popover: 0 0% 100%; /* bg-white */
+    --popover-foreground: 240 10% 3.9%; /* text-black/gray-900 */
+    --primary: 328 73% 51%; /* pink-600 */
+    --primary-foreground: 0 0% 100%; /* text-white */
+    --secondary: 210 40% 96.1%; /* bg-gray-100 */
+    --secondary-foreground: 240 10% 3.9%; /* text-gray-900 */
+    --muted: 210 40% 96.1%; /* bg-gray-100 */
+    --muted-foreground: 215.4 16.3% 46.9%; /* text-gray-500 */
+    --accent: 350 100% 94%; /* bg-pink-100 */
+    --accent-foreground: 240 5.9% 10%; /* text-gray-900 */
+    --destructive: 0 84.2% 60.2%; /* red-500 */
+    --destructive-foreground: 0 0% 98%; /* white */
+    --border: 214.3 31.8% 91.4%; /* border-gray-200 */
+    --input: 214.3 31.8% 91.4%; /* border-gray-200 */
+    --ring: 328 73% 51%; /* pink-600 */
+    --chart-1: 328 73% 51%; /* pink-600 */
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 350 100% 98%; /* bg-pink-50 */
+    --sidebar-foreground: 240 5.3% 26.1%; /* text-gray-700 */
+    --sidebar-primary: 328 73% 51%; /* pink-600 */
+    --sidebar-primary-foreground: 0 0% 100%; /* text-white */
+    --sidebar-accent: 350 100% 94%; /* bg-pink-100 */
+    --sidebar-accent-foreground: 240 5.9% 10%; /* text-gray-900 */
+    --sidebar-border: 220 13% 91%; /* border-gray-200 */
+    --sidebar-ring: 328 73% 51%; /* pink-600 */
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
+    /* Dark Mode Theme */
+    --background: 240 6% 10%; /* bg-gray-900 */
+    --foreground: 0 0% 98%; /* text-white */
+    --card: 240 5% 13%; /* bg-gray-800 */
+    --card-foreground: 0 0% 98%; /* text-white */
+    --popover: 240 5% 13%; /* bg-gray-800 */
+    --popover-foreground: 0 0% 98%; /* text-white */
+    --primary: 328 73% 51%; /* pink-600 */
+    --primary-foreground: 0 0% 100%; /* text-white */
+    --secondary: 240 4% 16%; /* bg-gray-800 */
+    --secondary-foreground: 0 0% 98%; /* text-white */
+    --muted: 240 4% 16%; /* bg-gray-800 */
+    --muted-foreground: 240 5% 65%; /* text-gray-400 */
+    --accent: 240 3.7% 15.9%; /* bg-gray-800 */
+    --accent-foreground: 0 0% 98%; /* text-white */
+    --destructive: 0 62.8% 30.6%; /* dark-red */
+    --destructive-foreground: 0 0% 98%; /* text-white */
+    --border: 240 4% 16%; /* border-gray-700 */
+    --input: 240 4% 16%; /* border-gray-700 */
+    --ring: 328 73% 51%; /* pink-600 */
+    --chart-1: 328 73% 51%; /* pink-600 */
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 240 6% 10%; /* bg-gray-900 */
+    --sidebar-foreground: 0 0% 98%; /* text-white */
+    --sidebar-primary: 328 73% 51%; /* pink-600 */
+    --sidebar-primary-foreground: 0 0% 100%; /* text-white */
+    --sidebar-accent: 240 4% 16%; /* bg-gray-800 */
+    --sidebar-accent-foreground: 0 0% 98%; /* text-white */
+    --sidebar-border: 240 3.7% 15.9%; /* border-gray-700 */
+    --sidebar-ring: 328 73% 51%; /* pink-600 */
   }
 }
 
@@ -84,5 +86,47 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Custom theme-specific styles */
+  .btn-primary {
+    @apply bg-pink-600 text-white hover:bg-pink-700;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600;
+  }
+
+  .card-hover {
+    @apply hover:shadow-md transition-shadow duration-200 dark:hover:shadow-pink-900/20;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-sm bg-white/80 dark:bg-gray-800/80;
+  }
+
+  /* Add this to your existing CSS */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.3);
+    border-radius: 20px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(156, 163, 175, 0.5);
+  }
+
+  /* For Firefox */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
   }
 }

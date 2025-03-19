@@ -1,133 +1,181 @@
-import { Ellipsis } from "lucide-react";
+"use client";
+
+import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { ProjectCard } from "./project-card";
-import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
 
-function Menu({ children }: { children: React.ReactNode }) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent className="pr-4 ml-8">
-        <DropdownMenuItem className="font-mono text-xs font-semibold opacity-75 focus:text-green-500 focus:bg-white focus:opacity-100">
-          Edit Column
-        </DropdownMenuItem>
-        <DropdownMenuItem className="font-mono text-xs font-semibold opacity-75 focus:text-green-500 focus:bg-white focus:opacity-100">
-          Add Column
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="font-mono text-xs font-semibold opacity-75 focus:text-red-500 focus:bg-white focus:opacity-100">
-          Delete Column
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-function MyDialog() {
-  return (
-    <Dialog>
-      <DialogTrigger>
-        <div className="text-xs text-gray-400 font-semibold hover:bg-gray-100 w-full justify-start px-2 py-1 rounded-lg">
-          + New Project
-        </div>
-      </DialogTrigger>
-      <DialogContent className="font-mono">
-        <DialogHeader>
-          <DialogTitle>New Project</DialogTitle>
-          <DialogDescription>Add a new project to the column</DialogDescription>
-        </DialogHeader>
-
-        <div className="flex flex-col gap-4">
-          <Input
-            type="text"
-            placeholder="Project Name"
-            className="border border-green-300 rounded-md p-2"
-          />
-          <Textarea
-            placeholder="Project Description"
-            className="border border-green-300 rounded-md p-2"
-          ></Textarea>
-          <Button className="bg-green-300 text-black hover:bg-green-400">
-            Create Project
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
 export function Column({
   stage,
   index,
   projects,
   zoom,
+  onMoveProject,
+  onEditProject,
+  onDeleteProject,
+  onAddProject,
+  columnColors,
 }: {
   stage: { name: string; color: string; dotColor: string };
   index: number;
   projects: { name: string; description: string }[];
   zoom: number;
+  onMoveProject: (
+    sourceColumnIndex: number,
+    projectIndex: number,
+    destinationColumnIndex: number
+  ) => void;
+  onEditProject: (columnIndex: number, projectIndex: number) => void;
+  onDeleteProject: (columnIndex: number, projectIndex: number) => void;
+  onAddProject: (columnIndex: number) => void;
+  columnColors: Record<number, string>;
 }) {
+  const columnRef = useRef<HTMLDivElement>(null);
+  const [isOver, setIsOver] = useState(false);
+  const [isDragTarget, setIsDragTarget] = useState(false);
+
+  // Simpler approach - we'll handle this from the card's side instead
+  const handleDragOver = () => setIsDragTarget(true);
+  const handleDragLeave = () => setIsDragTarget(false);
+
   return (
-    <div
-      key={index}
-      className="p-4 min-w-72 flex flex-col gap-4 h-fit max-w-80"
-      style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}
+    <motion.div
+      ref={columnRef}
+      className={`
+        p-4 flex flex-col
+        transition-all duration-300
+        ${
+          isOver
+            ? "bg-pink-50/50 dark:bg-gray-800/50"
+            : "bg-white dark:bg-gray-900"
+        }
+        ${
+          isDragTarget
+            ? "bg-pink-50/80 dark:bg-gray-800/80 shadow-lg ring-2 ring-pink-200 dark:ring-pink-900/30"
+            : ""
+        }
+        border border-gray-200 dark:border-gray-700
+        rounded-lg shadow-sm
+        w-[280px] min-w-[280px] max-w-[280px]
+        min-h-[200px] relative
+      `}
+      style={{
+        transform: `scale(${zoom})`,
+        transformOrigin: "top left",
+        borderLeft: `3px solid ${stage.color || "#ec4899"}`,
+      }}
+      data-column-index={index}
+      onHoverStart={() => setIsOver(true)}
+      onHoverEnd={() => setIsOver(false)}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDragEnd={() => setIsDragTarget(false)}
     >
-      <div className="flex justify-between gap-2 items-center mb-4">
-        <h2
-          className={cn(
-            "font-mono px-2 py-1 rounded-md flex justify-start items-center gap-1 text-sm w-3/4 cursor-move",
-            stage.color
+      {/* Column Header */}
+      <div className="flex justify-between items-center mb-3 sticky top-0 bg-inherit">
+        <div className="flex items-center gap-2">
+          <div
+            className="size-3 rounded-full"
+            style={{ background: stage.dotColor || "#ec4899" }}
+          />
+          <p className="font-medium text-sm text-gray-900 dark:text-white">
+            {stage.name}
+          </p>
+          {projects.length > 0 && (
+            <span className="inline-flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full w-5 h-5 text-xs font-medium text-gray-700 dark:text-gray-300">
+              {projects.length}
+            </span>
           )}
-        >
-          <span className="relative flex w-3 h-3">
-            <span
-              className={cn(
-                "absolute inline-flex h-full w-full animate-ping rounded-full",
-                stage.dotColor,
-                "opacity-75"
-              )}
-            ></span>
-            <span
-              className={cn(
-                "relative inline-flex w-3 h-3 rounded-full",
-                stage.dotColor
-              )}
-            ></span>
-          </span>
-          <span className="ml-2">{stage.name}</span>
-        </h2>
-        <div className={cn("flex gap-2")}>
-          <Menu>
-            <Ellipsis
-              size={18}
-              strokeWidth={1}
-              className="cursor-pointer transform hover:bg-gray-100 m-1 rounded-sm"
-            ></Ellipsis>
-          </Menu>
         </div>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="h-7 w-7 p-0 flex items-center justify-center text-xs rounded-full hover:bg-pink-100 hover:text-pink-700 dark:hover:bg-gray-700 dark:hover:text-white"
+          onClick={() => onAddProject(index)}
+        >
+          <Plus className="w-3.5 h-3.5" />
+        </Button>
       </div>
 
-      {/* Projects */}
-      {projects.map((project, index) => (
-        <ProjectCard key={index} project={project} />
-      ))}
-      <MyDialog />
-    </div>
+      {/* Projects List with fixed height and scrolling */}
+      <div
+        className="flex flex-col gap-4 overflow-y-auto min-h-[100px] max-h-[calc(100vh-250px)] pr-1 scroll-smooth custom-scrollbar"
+        data-column-drop-area={index}
+      >
+        <AnimatePresence>
+          {projects.map((project, projectIndex) => (
+            <motion.div
+              key={projectIndex}
+              className="pt-2 pb-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ProjectCard
+                project={project}
+                columnIndex={index}
+                projectIndex={projectIndex}
+                onDragEnd={({ source, destination, projectIndex }) => {
+                  setIsDragTarget(false);
+                  onMoveProject(source, projectIndex, destination);
+                }}
+                onEdit={onEditProject}
+                onDelete={onDeleteProject}
+                columnColors={columnColors}
+                onDragTargetChange={(columnIndex: number | null) => {
+                  setIsDragTarget(
+                    Boolean(columnIndex && columnIndex === index)
+                  );
+                }}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* Empty state with consistent height */}
+        {projects.length === 0 && (
+          <motion.div
+            className="flex items-center justify-center h-[100px] text-center text-gray-400 dark:text-gray-500 text-sm italic border border-dashed border-gray-200 dark:border-gray-700 rounded-lg"
+            animate={
+              isDragTarget
+                ? {
+                    scale: [1, 1.03, 1],
+                    borderColor: ["#e5e7eb", stage.color, "#e5e7eb"],
+                  }
+                : {}
+            }
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            Drop card here
+          </motion.div>
+        )}
+      </div>
+
+      {/* Add Project Button */}
+      <div
+        className="text-xs text-gray-400 dark:text-gray-500 font-medium hover:bg-pink-50 dark:hover:bg-gray-800 w-full text-center px-3 py-2 rounded-lg cursor-pointer mt-3 border border-dashed border-gray-200 dark:border-gray-700"
+        onClick={() => onAddProject(index)}
+      >
+        + Add Project
+      </div>
+
+      {/* Visual drop indicator - simplified */}
+      <AnimatePresence>
+        {isDragTarget && (
+          <motion.div
+            className="absolute inset-0 rounded-lg pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              boxShadow: `inset 0 0 0 2px ${stage.color || "#ec4899"}`,
+            }}
+            transition={{ duration: 0.2 }}
+          />
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

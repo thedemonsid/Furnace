@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Column } from "./column";
 import { Input } from "../ui/input";
 import {
   Dialog,
@@ -10,10 +11,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+interface Project {
+  id: string;
+  title: string;
+  description?: string;
+}
+
+interface Column {
+  name: string;
+  count: number;
+  color: string;
+  dotColor: string;
+  sortOrder: number;
+  projects: Project[];
+}
+
 export function AddColumnDialog({
   addColumn,
 }: {
-  addColumn: (column: any) => void;
+  addColumn: (column: Column) => void;
 }) {
   const [newColumnName, setNewColumnName] = useState("");
   const handleAddColumn = () => {
@@ -23,6 +39,7 @@ export function AddColumnDialog({
       color: "bg-blue-100",
       dotColor: "bg-blue-400",
       projects: [],
+      sortOrder: 0,
     });
     setNewColumnName("");
   };
