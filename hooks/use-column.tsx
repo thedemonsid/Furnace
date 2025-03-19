@@ -57,6 +57,58 @@ export const useProjectManager = () => {
     });
   };
 
+  const moveProject = (
+    sourceColumnIndex: number,
+    projectIndex: number,
+    destinationColumnIndex: number
+  ) => {
+    setColumns((prevColumns) => {
+      try {
+        const newColumns = [...prevColumns];
+
+        // Check if indices are valid
+        if (
+          sourceColumnIndex < 0 ||
+          sourceColumnIndex >= newColumns.length ||
+          projectIndex < 0 ||
+          projectIndex >=
+            (newColumns[sourceColumnIndex]?.projects?.length || 0) ||
+          destinationColumnIndex < 0 ||
+          destinationColumnIndex >= newColumns.length
+        ) {
+          console.log("Invalid indices detected:", {
+            sourceColumnIndex,
+            projectIndex,
+            destinationColumnIndex,
+          });
+          return prevColumns; // Return unchanged if indices are invalid
+        }
+
+        // Get the project to move
+        const projectToMove = {
+          ...newColumns[sourceColumnIndex].projects[projectIndex],
+        };
+
+        // Ensure the project has required properties
+        if (!projectToMove?.name) {
+          console.log("Invalid project detected:", projectToMove);
+          return prevColumns; // Return unchanged if project is invalid
+        }
+
+        // Remove from source column
+        newColumns[sourceColumnIndex].projects.splice(projectIndex, 1);
+
+        // Add to destination column
+        newColumns[destinationColumnIndex].projects.push(projectToMove);
+
+        return newColumns;
+      } catch (error) {
+        console.error("Error in moveProject:", error);
+        return prevColumns;
+      }
+    });
+  };
+
   return {
     columns,
     zoom,
@@ -68,5 +120,6 @@ export const useProjectManager = () => {
     addColumn,
     editColumn,
     deleteColumn,
+    moveProject,
   };
 };
