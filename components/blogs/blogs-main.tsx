@@ -13,10 +13,7 @@ const BlogsComponent = async () => {
       <div className="flex flex-wrap justify-between items-center mb-6 p-2 px-4 w-full">
         <div className="flex space-x-4 w-full md:w-1/2 mb-4 md:mb-0">
           <div className="relative">
-            <Input
-              placeholder="Find a Resource"
-              className="w-full text-sm pl-10"
-            />
+            <Input placeholder="Find a Blog" className="w-full text-sm pl-10" />
             <Search
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={16}
