@@ -22,6 +22,7 @@ interface Column {
   count: number;
   color: string;
   dotColor: string;
+  sortOrder: number;
   projects: Project[];
 }
 
@@ -38,6 +39,7 @@ export function AddColumnDialog({
       color: "bg-blue-100",
       dotColor: "bg-blue-400",
       projects: [],
+      sortOrder: 0,
     });
     setNewColumnName("");
   };

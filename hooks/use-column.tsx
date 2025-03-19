@@ -64,7 +64,8 @@ export const useProjectManager = () => {
   ) => {
     setColumns((prevColumns) => {
       try {
-        const newColumns = [...prevColumns];
+        // Create a deep copy to avoid reference issues
+        const newColumns = JSON.parse(JSON.stringify(prevColumns));
 
         // Check if indices are valid
         if (
@@ -76,23 +77,22 @@ export const useProjectManager = () => {
           destinationColumnIndex < 0 ||
           destinationColumnIndex >= newColumns.length
         ) {
-          console.log("Invalid indices detected:", {
+          console.error("Invalid indices:", {
             sourceColumnIndex,
             projectIndex,
             destinationColumnIndex,
           });
-          return prevColumns; // Return unchanged if indices are invalid
+          return prevColumns;
         }
 
         // Get the project to move
-        const projectToMove = {
-          ...newColumns[sourceColumnIndex].projects[projectIndex],
-        };
+        const projectToMove =
+          newColumns[sourceColumnIndex].projects[projectIndex];
 
-        // Ensure the project has required properties
-        if (!projectToMove?.name) {
-          console.log("Invalid project detected:", projectToMove);
-          return prevColumns; // Return unchanged if project is invalid
+        // Ensure we're not moving an empty project
+        if (!projectToMove || Object.keys(projectToMove).length === 0) {
+          console.error("Attempting to move an empty project");
+          return prevColumns;
         }
 
         // Remove from source column

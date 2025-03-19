@@ -2,7 +2,7 @@
 
 import { Edit, GripHorizontal, Trash2 } from "lucide-react";
 import { Card, CardDescription, CardHeader } from "../ui/card";
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
 
@@ -13,7 +13,9 @@ export function ProjectCard({
   onDragEnd,
   onEdit,
   onDelete,
-  columnColors = {}, // Provide default empty object
+  columnColors = {},
+  onDragStart,
+  onDragTargetChange,
 }: {
   project: { name: string; description: string };
   columnIndex: number;
@@ -26,67 +28,131 @@ export function ProjectCard({
   onEdit: (columnIndex: number, projectIndex: number) => void;
   onDelete: (columnIndex: number, projectIndex: number) => void;
   columnColors?: Record<number, string>;
+  onDragStart?: () => void;
+  onDragTargetChange?: (columnIndex: number | null) => void;
 }) {
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isNearScreenEdge, setIsNearScreenEdge] = useState(false);
   const [nearestColumn, setNearestColumn] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const deleteTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Handle nearest column detection
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Handle double-click to edit
+  const handleDoubleClick = () => {
+    onEdit(columnIndex, projectIndex);
+  };
+
+  // Detect which column we're over while dragging
   useEffect(() => {
     if (!isDragging) {
-      setNearestColumn(null);
+      if (nearestColumn !== null) {
+        setNearestColumn(null);
+        if (onDragTargetChange) onDragTargetChange(null);
+      }
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const detectNearestColumn = (e: MouseEvent) => {
+      // Find the column we're currently over
       const columns = document.querySelectorAll("[data-column-index]");
-      let closest = null;
-      let closestDistance = Infinity;
+      let foundColumn: number | null = null;
 
       columns.forEach((column) => {
+        // Skip if it's our own card (which also has data-column-index)
+        if ((column as HTMLElement).hasAttribute("data-project-index")) {
+          return;
+        }
+
         const rect = column.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        // Calculate distance from mouse to column center
-        const distance = Math.sqrt(
-          Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2)
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closest = parseInt(
-            (column as HTMLElement).getAttribute("data-column-index") || "0"
+        if (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+        ) {
+          foundColumn = parseInt(
+            (column as HTMLElement).getAttribute("data-column-index") || "0",
+            10
           );
         }
       });
 
-      if (closest !== null && closest !== columnIndex) {
-        setNearestColumn(closest);
-      } else {
-        setNearestColumn(null);
+      // Check if we're near the screen edge
+      const edgeThreshold = 40;
+      const newIsNearEdge =
+        e.clientX < edgeThreshold ||
+        e.clientY < edgeThreshold ||
+        window.innerWidth - e.clientX < edgeThreshold ||
+        window.innerHeight - e.clientY < edgeThreshold;
+
+      // Handle screen edge detection for delete
+      if (newIsNearEdge !== isNearScreenEdge) {
+        setIsNearScreenEdge(newIsNearEdge);
+
+        if (newIsNearEdge) {
+          deleteTimerRef.current = setTimeout(() => {
+            onDelete(columnIndex, projectIndex);
+          }, 1000);
+        } else if (deleteTimerRef.current) {
+          clearTimeout(deleteTimerRef.current);
+          deleteTimerRef.current = null;
+        }
+      }
+
+      // Update nearest column if changed
+      if (foundColumn !== nearestColumn) {
+        setNearestColumn(foundColumn);
+        if (onDragTargetChange) onDragTargetChange(foundColumn);
       }
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, [isDragging, columnIndex]);
+    window.addEventListener("mousemove", detectNearestColumn);
+    return () => {
+      window.removeEventListener("mousemove", detectNearestColumn);
+      if (deleteTimerRef.current) {
+        clearTimeout(deleteTimerRef.current);
+      }
+    };
+  }, [
+    isDragging,
+    nearestColumn,
+    isNearScreenEdge,
+    columnIndex,
+    onDelete,
+    projectIndex,
+    onDragTargetChange,
+  ]);
 
-  // Determine border color based on nearest column during drag
+  // Get border/visual style based on state
   const getBorderStyle = () => {
-    // Use optional chaining and nullish coalescing to safely access properties
-    const currentColor = columnColors?.[columnIndex] ?? "#e5e7eb";
+    const currentColor = columnColors?.[columnIndex] ?? "#ec4899";
 
-    if (!isDragging || nearestColumn === null) {
-      return { borderColor: currentColor };
+    if (isNearScreenEdge) {
+      return {
+        borderColor: "#ef4444",
+        borderWidth: "2px",
+        boxShadow: "0 0 10px rgba(239, 68, 68, 0.5)",
+      };
     }
 
-    const nearestColor = columnColors?.[nearestColumn] ?? "#e5e7eb";
+    if (!isDragging || nearestColumn === null) {
+      return {
+        borderColor: currentColor,
+        boxShadow: isHovering
+          ? `0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px ${currentColor}40`
+          : "0 2px 5px rgba(0, 0, 0, 0.05)",
+      };
+    }
 
+    const nearestColor = columnColors?.[nearestColumn] ?? "#ec4899";
     return {
       borderColor: nearestColor,
       borderWidth: "2px",
-      boxShadow: `0 0 10px 1px ${nearestColor}40`,
+      boxShadow: `0 8px 16px rgba(0, 0, 0, 0.1), 0 0 0 2px ${nearestColor}60`,
     };
   };
 
@@ -94,14 +160,34 @@ export function ProjectCard({
     <motion.div
       ref={cardRef}
       drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      dragElastic={0.8}
-      whileDrag={{ scale: 1.05, zIndex: 20 }}
-      onDragStart={() => setIsDragging(true)}
+      dragSnapToOrigin={false}
+      style={{ x, y }}
+      dragTransition={{
+        bounceStiffness: 400,
+        bounceDamping: 20,
+        power: 0.2,
+      }}
+      whileDrag={{
+        scale: 1.03,
+        boxShadow: isNearScreenEdge
+          ? "0 0 15px rgba(239, 68, 68, 0.5)"
+          : "0 10px 20px rgba(0, 0, 0, 0.1)",
+      }}
+      onHoverStart={() => setIsHovering(true)}
+      onHoverEnd={() => setIsHovering(false)}
+      onDragStart={() => {
+        setIsDragging(true);
+        if (onDragStart) onDragStart();
+      }}
       onDragEnd={() => {
         setIsDragging(false);
+        setIsNearScreenEdge(false);
 
-        // Find the nearest column
+        if (deleteTimerRef.current) {
+          clearTimeout(deleteTimerRef.current);
+          deleteTimerRef.current = null;
+        }
+
         if (nearestColumn !== null && nearestColumn !== columnIndex) {
           onDragEnd({
             source: columnIndex,
@@ -109,63 +195,114 @@ export function ProjectCard({
             projectIndex,
           });
         }
+
+        // Reset motion values
+        x.set(0);
+        y.set(0);
       }}
-      style={{
-        position: "relative",
-        transition: "border-color 0.3s, box-shadow 0.3s",
-        ...getBorderStyle(),
-      }}
-      className={`${isDragging ? "z-50" : ""}`}
-      dragMomentum={false}
       data-column-index={columnIndex}
       data-project-index={projectIndex}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      whileHover={{ y: -3 }}
+      className="cursor-grab active:cursor-grabbing touch-none"
     >
       <Card
         className={`
-          cursor-grab active:cursor-grabbing
-          hover:shadow-md
-          border-2
-          backdrop-blur-sm bg-white/85
-          ${isDragging ? "" : "hover:border-gray-300"}
-          transition-all duration-300
+          border border-gray-200 dark:border-gray-700
+          bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm
+          ${isNearScreenEdge ? "border-red-500" : ""}
+          ${isDragging ? "shadow-lg" : ""}
+          ${
+            isHovering && !isDragging
+              ? "border-pink-200 dark:border-pink-700"
+              : ""
+          }
+          transition-all duration-200
+          rounded-lg overflow-hidden
         `}
+        style={getBorderStyle()}
+        onDoubleClick={handleDoubleClick}
       >
         <CardHeader className="p-4 relative">
           <div className="flex justify-between items-center">
-            <h3 className="font-bold text-sm py-1">{project.name}</h3>
-            <GripHorizontal className="w-5 h-5 text-gray-400 hover:text-gray-700" />
+            <h3 className="font-medium text-sm py-1 text-gray-900 dark:text-white">
+              {project.name}
+            </h3>
+            <div className="opacity-60 cursor-grab active:cursor-grabbing">
+              <GripHorizontal className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+            </div>
           </div>
           <CardDescription>
-            <p className="text-gray-500 text-xs m-0 p-0 mb-6">
+            <p className="text-gray-500 dark:text-gray-400 text-xs m-0 p-0 mb-8">
               {project.description}
             </p>
           </CardDescription>
 
-          {/* Edit and Delete buttons */}
-          <div className="absolute bottom-2 right-2 flex gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0"
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit(columnIndex, projectIndex);
-              }}
+          {/* Button controls */}
+          {(isHovering || isDragging) && (
+            <motion.div
+              className="absolute bottom-2 right-2 flex gap-1"
+              initial={{ opacity: 0, y: 3 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 3 }}
             >
-              <Edit className="h-3.5 w-3.5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(columnIndex, projectIndex);
-              }}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(columnIndex, projectIndex);
+                }}
+              >
+                <Edit className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(columnIndex, projectIndex);
+                }}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </motion.div>
+          )}
+
+          {/* Delete indicator when near screen edge */}
+          {isNearScreenEdge && (
+            <motion.div
+              className="absolute inset-0 bg-red-100/40 dark:bg-red-900/30 rounded-lg flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
             >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-          </div>
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >
+                <Trash2 className="h-8 w-8 text-red-500" />
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* Column destination indicator */}
+          {isDragging && nearestColumn !== null && !isNearScreenEdge && (
+            <motion.div
+              className="absolute inset-0 rounded-lg pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              style={{
+                borderColor: columnColors?.[nearestColumn] ?? "#ec4899",
+                borderWidth: "2px",
+                borderStyle: "dashed",
+              }}
+            />
+          )}
         </CardHeader>
       </Card>
     </motion.div>
