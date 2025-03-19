@@ -19,6 +19,7 @@ import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { ModeToggle } from "../mode-toggle";
 
 const sidebarItems = [
   {
@@ -192,6 +193,11 @@ export function Sidebar() {
           </Avatar>
         </div>
       )}
+      <div className="text-left pr-3">
+        {" "}
+        <ModeToggle></ModeToggle>{" "}
+        {/** //Todo: Hydration warning + Allignment */}
+      </div>
     </div>
   );
 }
